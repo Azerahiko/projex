@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Task\TaskController;
@@ -20,4 +21,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+
+    // Client routes
+    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
+    Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+    Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
+    Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+    Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
+    Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 });

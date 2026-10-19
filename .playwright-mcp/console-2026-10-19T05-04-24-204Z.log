@@ -1,0 +1,57 @@
+[     735ms] [LOG] 🔍 Browser logger active (MCP server detected). Posting to: http://localhost:8000/_boost/browser-logs @ http://localhost:8000/clients:84
+[    1361ms] [WARNING] [Vue warn]: Unhandled error during execution of render function 
+  at <AppLayout> 
+  at <Index errors= {} name="Projex" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: clients/index, props: Object, url: /clients, version: cae87cdc1a82aa735f257ff8cb471aeb, sharedProps: Array(3)} initialComponent= {setup: , __name: index, __hmrId: 65ade721, render: , __file: /home/azerahiko/Projects/projex/resources/js/pages/clients/index.vue} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/clients:171
+[    1413ms] [WARNING] [Vue warn]: Unhandled error during execution of render function 
+  at <AppLayout> 
+  at <Index errors= {} name="Projex" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: clients/index, props: Object, url: /clients, version: cae87cdc1a82aa735f257ff8cb471aeb, sharedProps: Array(3)} initialComponent= {setup: , __name: index, __hmrId: 65ade721, render: , __file: /home/azerahiko/Projects/projex/resources/js/pages/clients/index.vue} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/clients:171
+[    1426ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <Inertia initialPage= {component: clients/index, props: Object, url: /clients, version: cae87cdc1a82aa735f257ff8cb471aeb, sharedProps: Array(3)} initialComponent= {setup: , __name: index, __hmrId: 65ade721, render: , __file: /home/azerahiko/Projects/projex/resources/js/pages/clients/index.vue} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/clients:171
+[    1671ms] TypeError: Cannot read properties of undefined (reading 'url')
+    at http://[::1]:5173/resources/js/pages/clients/index.vue?t=1792385382611:102:41
+    at renderFnWithContext (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:2360:10)
+    at renderSlot (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:4110:53)
+    at Proxy._sfc_render (http://[::1]:5173/resources/js/layouts/AppLayout.vue?t=1792385382611:333:9)
+    at renderComponentRoot (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:4959:35)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5831:41)
+    at ReactiveEffect.run (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:474:16)
+    at setupRenderEffect (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5902:3)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5782:10)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5762:9)
+[    1677ms] TypeError: Cannot read properties of undefined (reading 'url')
+    at http://[::1]:5173/resources/js/pages/clients/index.vue?t=1792385382611:102:41
+    at renderFnWithContext (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:2360:10)
+    at renderSlot (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:4110:53)
+    at Proxy._sfc_render (http://[::1]:5173/resources/js/layouts/AppLayout.vue?t=1792385382611:333:9)
+    at renderComponentRoot (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:4959:35)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5831:41)
+    at ReactiveEffect.run (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:474:16)
+    at setupRenderEffect (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5902:3)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5782:10)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5762:9)
+[  190620ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <AppLayout> 
+  at <Index errors= {} name="Projex" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: clients/index, props: Object, url: /clients, version: cae87cdc1a82aa735f257ff8cb471aeb, sharedProps: Array(3)} initialComponent= {setup: , __name: index, __hmrId: 65ade721, render: , __file: /home/azerahiko/Projects/projex/resources/js/pages/clients/index.vue} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/clients:171
+[  190632ms] [WARNING] [Vue warn]: Unhandled error during execution of scheduler flush 
+  at <AppLayout> 
+  at <Index errors= {} name="Projex" auth= {user: Object}  ... > 
+  at <Inertia initialPage= {component: clients/index, props: Object, url: /clients, version: cae87cdc1a82aa735f257ff8cb471aeb, sharedProps: Array(3)} initialComponent= {setup: , __name: index, __hmrId: 65ade721, render: , __file: /home/azerahiko/Projects/projex/resources/js/pages/clients/index.vue} resolveComponent=fn<resolveComponent>  ... > 
+  at <App> @ http://localhost:8000/clients:171
+[  190708ms] TypeError: clients.url is not a function
+    at setup (http://[::1]:5173/resources/js/layouts/AppLayout.vue?t=1792386453599:27:38)
+    at callWithErrorHandling (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:1962:17)
+    at setupStatefulComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:7042:23)
+    at setupComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:7018:35)
+    at mountComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5772:3)
+    at processComponent (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5762:9)
+    at patch (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5551:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:5834:6)
+    at ReactiveEffect.run (http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:474:16)
+    at http://[::1]:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-DgbxkcxH.js?v=e89934de:2242:21

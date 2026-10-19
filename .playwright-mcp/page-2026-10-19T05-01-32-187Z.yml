@@ -1,0 +1,28 @@
+- generic [ref=f2e4]:
+  - generic [ref=f2e5]:
+    - generic [ref=f2e6]: P
+    - heading "Buat Akun Projex" [level=1] [ref=f2e9]
+    - paragraph [ref=f2e10]: Bergabunglah dengan Projex dan mulai kelola project Anda.
+  - generic [ref=f2e11]:
+    - generic [ref=f2e13]:
+      - generic [ref=f2e14]:
+        - generic [ref=f2e15]: Nama Lengkap
+        - textbox "Nama Lengkap" [ref=f2e17]: Test User
+      - generic [ref=f2e18]:
+        - generic [ref=f2e19]: Email
+        - generic [ref=f2e20]:
+          - textbox "Email" [ref=f2e21]: test@example.com
+          - paragraph [ref=f2e35]: The email has already been taken.
+      - generic [ref=f2e22]:
+        - generic [ref=f2e23]: Password
+        - generic [ref=f2e24]:
+          - textbox "Password" [ref=f2e25]
+          - paragraph [ref=f2e26]: Minimal 8 karakter.
+      - generic [ref=f2e27]:
+        - generic [ref=f2e28]: Konfirmasi Password
+        - textbox "Konfirmasi Password" [ref=f2e30]
+      - button "Daftar" [ref=f2e32]
+    - paragraph [ref=f2e33]:
+      - text: Sudah punya akun?
+      - link "Masuk" [ref=f2e34] [cursor=pointer]:
+        - /url: /login
