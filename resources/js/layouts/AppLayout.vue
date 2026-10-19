@@ -5,6 +5,7 @@ import { logout as logoutRoute, dashboard } from '@/routes';
 import { index as projectsIndex } from '@/routes/projects';
 import { index as tasksIndex } from '@/routes/tasks';
 import { index as settingsIndex } from '@/routes/settings';
+import clients from '@/routes/clients';
 
 const projects = projectsIndex;
 const tasks = tasksIndex;
@@ -18,6 +19,7 @@ const dropdownOpen = ref(false);
 
 const navigation = [
     { name: 'Dashboard', href: dashboard.url(), icon: 'home', current: page.url === '/dashboard' },
+    { name: 'Clients', href: clients.index.url(), icon: 'users', current: page.url.startsWith('/clients') },
     { name: 'Projects', href: projects.url(), icon: 'folder', current: page.url.startsWith('/projects') },
     { name: 'Tasks', href: tasks.url(), icon: 'check-circle', current: page.url.startsWith('/tasks') },
     { name: 'Settings', href: settings.url(), icon: 'cog', current: page.url.startsWith('/settings') },
@@ -81,6 +83,10 @@ function logout() {
                         <!-- Home icon -->
                         <svg v-if="item.icon === 'home'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <!-- Users icon -->
+                        <svg v-else-if="item.icon === 'users'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         <!-- Folder icon -->
                         <svg v-else-if="item.icon === 'folder'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

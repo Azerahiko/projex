@@ -24,14 +24,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // Gates for project authorization - will be enabled after Project model is created
-        // Gate::define('view-project', function (User $user, int $projectId): bool {
-        //     return $user->ownedProjects()->where('id', $projectId)->exists()
-        //         || $user->projects()->where('id', $projectId)->exists();
-        // });
-        //
-        // Gate::define('manage-project', function (User $user, int $projectId): bool {
-        //     return $user->ownedProjects()->where('id', $projectId)->exists();
-        // });
+        Gate::define('view-project', function (User $user, int $projectId): bool {
+            return $user->ownedProjects()->where('id', $projectId)->exists()
+                || $user->projects()->where('id', $projectId)->exists();
+        });
+
+        Gate::define('manage-project', function (User $user, int $projectId): bool {
+            return $user->ownedProjects()->where('id', $projectId)->exists();
+        });
     }
 }
