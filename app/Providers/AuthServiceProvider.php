@@ -25,12 +25,12 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('view-project', function (User $user, int $projectId): bool {
-            return $user->ownedProjects()->where('id', $projectId)->exists()
-                || $user->projects()->where('id', $projectId)->exists();
+            return $user->ownedProjects()->where('projects.id', $projectId)->exists()
+                || $user->projects()->where('projects.id', $projectId)->exists();
         });
 
         Gate::define('manage-project', function (User $user, int $projectId): bool {
-            return $user->ownedProjects()->where('id', $projectId)->exists();
+            return $user->ownedProjects()->where('projects.id', $projectId)->exists();
         });
     }
 }
