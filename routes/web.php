@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Task\TaskController;
@@ -16,9 +17,17 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.st
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::inertia('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Project routes
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+    Route::get('/projects/{project}', [ProjectController::class, 'show'])->name('projects.show');
+    Route::get('/projects/{project}/edit', [ProjectController::class, 'edit'])->name('projects.edit');
+    Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 

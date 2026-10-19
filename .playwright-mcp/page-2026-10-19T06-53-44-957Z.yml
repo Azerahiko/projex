@@ -1,0 +1,52 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - link "P Projex" [ref=e7] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e8]: P
+        - generic [ref=e10]: Projex
+      - navigation [ref=e11]:
+        - link "Dashboard" [ref=e12] [cursor=pointer]:
+          - /url: /dashboard
+        - link "Clients" [ref=e15] [cursor=pointer]:
+          - /url: /clients
+        - link "Projects" [ref=e18] [cursor=pointer]:
+          - /url: /projects
+        - link "Tasks" [ref=e21] [cursor=pointer]:
+          - /url: /tasks
+        - link "Settings" [ref=e24] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e29]:
+        - generic [ref=e30]: T
+        - generic [ref=e32]:
+          - paragraph [ref=e33]: Test User 2
+          - paragraph [ref=e34]: test2@example.com
+  - generic [ref=e35]:
+    - banner [ref=e36]:
+      - generic [ref=e37]:
+        - button [ref=e38]
+        - heading "Projects" [level=1] [ref=e42]
+        - button "T Test User 2" [ref=e44]:
+          - generic [ref=e45]: T
+          - generic [ref=e47]: Test User 2
+    - main [ref=e50]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - heading "Daftar Project" [level=2] [ref=e53]
+          - link "+ Project Baru" [ref=e54] [cursor=pointer]:
+            - /url: /projects/create
+        - table [ref=e56]:
+          - rowgroup [ref=e57]:
+            - row [ref=e58]:
+              - columnheader "Nama" [ref=e59]
+              - columnheader "Client" [ref=e60]
+              - columnheader "Periode" [ref=e61]
+              - columnheader "Status" [ref=e62]
+              - columnheader "Tugas" [ref=e63]
+              - columnheader "Aksi" [ref=e64]
+          - rowgroup
+        - generic [ref=e65]:
+          - heading "Belum ada project" [level=3] [ref=e69]
+          - paragraph [ref=e70]: Mulai dengan membuat project baru.
+          - link "+ Project Baru" [ref=e71] [cursor=pointer]:
+            - /url: /projects/create
