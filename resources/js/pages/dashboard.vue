@@ -1,51 +1,67 @@
 <script setup>
+import AppLayout from '@/layouts/AppLayout.vue';
 import { usePage } from '@inertiajs/vue3';
 
 const { auth } = usePage().props;
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex">
-            <div class="flex-shrink-0 flex items-center">
-              <h1 class="font-semibold text-xl text-gray-900 tracking-tight">
-                Projex Dashboard
-              </h1>
+    <AppLayout>
+        <template #title>Dashboard</template>
+        
+        <div class="space-y-6">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">
+                    Selamat Datang, {{ auth.user.name }}
+                </h2>
+                <p class="text-gray-600">
+                    Ini adalah dashboard Projex. Project dan tugas Anda akan ditampilkan di sini setelah fitur manajemen project diimplementasikan.
+                </p>
             </div>
-          </div>
-          <div class="hidden sm:ml-6 sm:flex sm:items-center">
-            <span class="mr-4 text-sm text-gray-700">
-              Halo, {{ auth.user.name }}
-            </span>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-              @csrf
-              <button
-                class="px-3 py-2 text-sm font-medium text-red-600 hover:underline"
-                type="submit"
-              >
-                Keluar
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
-        <div class="border-4 border-dashed border-gray-200 rounded-lg h-96 flex flex-col items-center justify-center text-center">
-          <h2 class="text-lg font-medium text-gray-900">
-            Dashboard Anda
-          </h2>
-          <p class="mt-1 max-w-xs mx-auto text-sm text-gray-500">
-            Project dan tugas akan ditampilkan di sini. Fitur manajemen project
-            akan tersedia dalam tahap pengembangan selanjutnya.
-          </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects card -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-medium text-gray-900">Projects</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">0</p>
+                    <p class="text-sm text-gray-500">Project aktif</p>
+                </div>
+
+                <!-- Tasks card -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="font-medium text-gray-900">Tugas</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">0</p>
+                    <p class="text-sm text-gray-500">Tugas menunggu</p>
+                </div>
+
+                <!-- Completed card -->
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 class="font-medium text-gray-900">Selesai</h3>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-900">0</p>
+                    <p class="text-sm text-gray-500">Tugas selesai</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </main>
-  </div>
+    </AppLayout>
 </template>

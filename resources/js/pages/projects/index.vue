@@ -1,0 +1,36 @@
+<script setup>
+import AppLayout from '@/layouts/AppLayout.vue';
+</script>
+
+<template>
+    <AppLayout>
+        <template #title>Projects</template>
+        
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-medium text-gray-900">Daftar Project</h2>
+                    <button
+                        type="button"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                        disabled
+                    >
+                        + Project Baru
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-12 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-1">Belum ada project</h3>
+                <p class="text-gray-500 text-sm mb-4">
+                    Fitur manajemen project akan segera tersedia.
+                </p>
+            </div>
+        </div>
+    </AppLayout>
+</template>

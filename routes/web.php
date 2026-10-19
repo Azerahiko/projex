@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Project\ProjectController;
+use App\Http\Controllers\Setting\SettingController;
+use App\Http\Controllers\Task\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'home')->name('home');
@@ -13,4 +16,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.st
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::inertia('/dashboard', 'dashboard')->name('dashboard');
+
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
