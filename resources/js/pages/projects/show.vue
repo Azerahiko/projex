@@ -152,14 +152,18 @@ const getActivityLabel = (type) => {
                 <div class="space-y-6 p-6">
                     <!-- Project Info -->
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-                        <div>
+                        <div class="md:col-span-3">
                             <label
                                 class="block text-sm font-medium text-gray-500"
                                 >Client</label
                             >
-                            <p class="mt-1 text-gray-900">
-                                {{ project.client?.name ?? '-' }}
-                            </p>
+                            <div v-if="project.client" class="mt-1 space-y-1">
+                                <p class="text-gray-900 font-medium">{{ project.client.name }}</p>
+                                <p class="text-sm text-gray-700">{{ project.client.email }}</p>
+                                <p v-if="project.client.phone" class="text-sm text-gray-700">{{ project.client.phone }}</p>
+                                <p v-if="project.client.company" class="text-sm text-gray-700">{{ project.client.company }}</p>
+                            </div>
+                            <p v-else class="mt-1 text-gray-500">-</p>
                         </div>
                         <div>
                             <label

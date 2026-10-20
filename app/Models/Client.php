@@ -14,8 +14,6 @@ use Illuminate\Support\Carbon;
  * @property string $email
  * @property string|null $phone
  * @property string|null $company
- * @property string|null $address
- * @property string|null $notes
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -36,8 +34,6 @@ class Client extends Model
         'email',
         'phone',
         'company',
-        'address',
-        'notes',
     ];
 
     /**
@@ -48,5 +44,25 @@ class Client extends Model
     public function projects(): HasMany
     {
         return $this->hasMany(Project::class);
+    }
+
+    /**
+     * Get the users for the client.
+     *
+     * @return HasMany<User, $this>
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+
+    /**
+     * Delete the client if it has no projects and no users.
+     */
+    public function deleteIfUnreferenced(): void
+    {
+        if (! $this->projects()->exists() && ! $this->users()->exists()) {
+            $this->delete();
+        }
     }
 }

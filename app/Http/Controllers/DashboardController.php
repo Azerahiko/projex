@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
@@ -50,8 +49,6 @@ class DashboardController extends Controller
             'client' => User::where('role', 'client')->count(),
         ];
 
-        $totalClients = Client::count();
-
         return inertia('dashboard', [
             'dashboardType' => 'admin',
             'activeProjects' => $activeProjects,
@@ -61,7 +58,6 @@ class DashboardController extends Controller
             'totalTasks' => $totalTasks,
             'totalUsers' => $totalUsers,
             'usersByRole' => $usersByRole,
-            'totalClients' => $totalClients,
             'assignedTasks' => [],
         ]);
     }

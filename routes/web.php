@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Activity\ActivityController;
-use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\InvitationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
@@ -36,10 +35,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/invitations', [InvitationController::class, 'store'])->name('invitations.store');
         Route::post('/invitations/{invitation}/resend', [InvitationController::class, 'resend'])->name('invitations.resend');
         Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('invitations.destroy');
-
-        Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
-        Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
-        Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
     });
 
     // Project routes

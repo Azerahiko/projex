@@ -44,11 +44,7 @@ class ProjectController extends Controller
     {
         $this->authorizeProjectCreation();
 
-        $clients = Client::orderBy('name')->get(['id', 'name']);
-
-        return Inertia::render('projects/create', [
-            'clients' => $clients,
-        ]);
+        return Inertia::render('projects/create');
     }
 
     /**
@@ -58,9 +54,17 @@ class ProjectController extends Controller
     {
         $this->authorizeProjectCreation();
 
+        $data = $request->validated();
+        $client = $this->resolveClientFromData($data);
+
         $project = Project::create([
-            ...$request->validated(),
+            'name' => $data['name'],
+            'description' => $data['description'] ?? null,
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'status' => $data['status'],
             'user_id' => auth()->id(),
+            'client_id' => $client?->id,
         ]);
 
         $this->activityLogger->log(
@@ -103,11 +107,9 @@ class ProjectController extends Controller
         $this->authorize('manage-project', $project->id);
 
         $project->load('client');
-        $clients = Client::orderBy('name')->get(['id', 'name']);
 
         return Inertia::render('projects/edit', [
             'project' => $project,
-            'clients' => $clients,
         ]);
     }
 
@@ -118,7 +120,24 @@ class ProjectController extends Controller
     {
         $this->authorize('manage-project', $project->id);
 
-        $project->update($request->validated());
+        $data = $request->validated();
+        $previousClientId = $project->client_id;
+
+        $client = $this->resolveClientFromData($data);
+
+        $project->update([
+            'name' => $data['name'],
+            'description' => $data['description'] ?? null,
+            'start_date' => $data['start_date'],
+            'end_date' => $data['end_date'],
+            'status' => $data['status'],
+            'client_id' => $client?->id,
+        ]);
+
+        // Clean up orphaned client (no projects, no users)
+        if ($previousClientId && $previousClientId !== $client?->id) {
+            Client::find($previousClientId)?->deleteIfUnreferenced();
+        }
 
         $this->activityLogger->log(
             ActivityType::ProjectUpdated,
@@ -155,5 +174,30 @@ class ProjectController extends Controller
         if (! $user->hasAnyPermission(['manage_all_projects', 'manage_owned_projects', 'create_projects'])) {
             abort(403, 'Anda tidak memiliki izin untuk membuat project.');
         }
+    }
+
+    /**
+     * Resolve client from project form data.
+     * Reuses existing client by email to avoid duplication.
+     */
+    private function resolveClientFromData(array $data): ?Client
+    {
+        if (blank($data['client_email'] ?? null)) {
+            return null;
+        }
+
+        $client = Client::firstOrNew(['email' => $data['client_email']]);
+        $client->name = $data['client_name'];
+
+        if (filled($data['client_phone'])) {
+            $client->phone = $data['client_phone'];
+        }
+        if (filled($data['client_company'])) {
+            $client->company = $data['client_company'];
+        }
+
+        $client->save();
+
+        return $client;
     }
 }

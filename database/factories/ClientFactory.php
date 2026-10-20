@@ -22,8 +22,6 @@ class ClientFactory extends Factory
             'email' => fake()->unique()->companyEmail(),
             'phone' => fake()->phoneNumber(),
             'company' => fake()->company(),
-            'address' => fake()->address(),
-            'notes' => fake()->paragraph(),
         ];
     }
 }

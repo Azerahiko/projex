@@ -30,7 +30,10 @@ class UpdateProjectRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'client_id' => ['nullable', 'exists:clients,id'],
+            'client_name' => ['nullable', 'string', 'max:255', 'required_with:client_email'],
+            'client_email' => ['nullable', 'email', 'max:255', 'required_with:client_name'],
+            'client_phone' => ['nullable', 'string', 'max:20'],
+            'client_company' => ['nullable', 'string', 'max:255'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'status' => ['required', 'string', Rule::in(['aktif', 'arsip'])],
@@ -51,7 +54,9 @@ class UpdateProjectRequest extends FormRequest
             'end_date.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
             'status.required' => 'Status wajib dipilih.',
             'status.in' => 'Status tidak valid. Pilih: aktif atau arsip.',
-            'client_id.exists' => 'Client tidak ditemukan.',
+            'client_name.required_with' => 'Nama klien wajib diisi bila email klien diisi.',
+            'client_email.required_with' => 'Email klien wajib diisi bila nama klien diisi.',
+            'client_email.email' => 'Format email klien tidak valid.',
         ];
     }
 }

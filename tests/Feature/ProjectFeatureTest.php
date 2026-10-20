@@ -44,7 +44,10 @@ test('user can create project', function () {
     $data = [
         'name' => 'New Project',
         'description' => 'Project description',
-        'client_id' => $this->client->id,
+        'client_name' => 'Test Client',
+        'client_email' => 'client@test.com',
+        'client_phone' => '08123456789',
+        'client_company' => 'Test Company',
         'start_date' => '2025-01-15',
         'end_date' => '2025-06-15',
         'status' => 'aktif',
@@ -56,8 +59,11 @@ test('user can create project', function () {
     $this->assertDatabaseHas('projects', [
         'name' => 'New Project',
         'user_id' => $this->user->id,
-        'client_id' => $this->client->id,
         'status' => 'aktif',
+    ]);
+    $this->assertDatabaseHas('clients', [
+        'name' => 'Test Client',
+        'email' => 'client@test.com',
     ]);
 });
 
@@ -130,7 +136,10 @@ test('user can update their own project', function () {
     $data = [
         'name' => 'Updated Name',
         'description' => 'Updated description',
-        'client_id' => $this->client->id,
+        'client_name' => 'Updated Client',
+        'client_email' => 'updated@test.com',
+        'client_phone' => '08123456789',
+        'client_company' => 'Updated Company',
         'start_date' => '2025-01-15',
         'end_date' => '2025-06-15',
         'status' => 'arsip',
@@ -143,6 +152,10 @@ test('user can update their own project', function () {
         'id' => $project->id,
         'name' => 'Updated Name',
         'status' => 'arsip',
+    ]);
+    $this->assertDatabaseHas('clients', [
+        'name' => 'Updated Client',
+        'email' => 'updated@test.com',
     ]);
 });
 
