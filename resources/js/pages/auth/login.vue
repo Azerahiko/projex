@@ -1,7 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { Link } from '@inertiajs/vue3';
-import { login as loginRoute, register as registerRoute } from '@/routes';
+import { login as loginRoute } from '@/routes';
 
 const form = useForm({
     email: '',
@@ -123,16 +122,6 @@ function submit() {
                         </div>
                     </div>
                 </form>
-
-                <p class="mt-6 text-center text-sm text-gray-600">
-                    Belum punya akun?
-                    <Link
-                        :href="registerRoute.url()"
-                        class="font-medium text-blue-600 hover:text-blue-500"
-                    >
-                        Daftar sekarang
-                    </Link>
-                </p>
             </div>
         </div>
     </div>

@@ -1,11 +1,6 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import {
-    login as loginRoute,
-    register as registerRoute,
-    logout as logoutRoute,
-    dashboard,
-} from '@/routes';
+import { login as loginRoute, logout as logoutRoute, dashboard } from '@/routes';
 import { router } from '@inertiajs/vue3';
 
 const page = usePage();
@@ -54,18 +49,12 @@ const auth = page.props.auth;
                 </div>
             </div>
 
-            <div v-else class="grid grid-cols-2 gap-4">
+            <div v-else class="flex justify-center">
                 <Link
                     :href="loginRoute.url()"
-                    class="rounded-lg border border-transparent bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                    class="rounded-lg border border-transparent bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700 w-full max-w-xs"
                 >
                     Masuk
-                </Link>
-                <Link
-                    :href="registerRoute.url()"
-                    class="rounded-lg border border-transparent bg-green-600 px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-green-700"
-                >
-                    Daftar
                 </Link>
             </div>
         </div>

@@ -12,10 +12,10 @@ use App\Models\User;
 use App\Notifications\TaskAssignedNotification;
 use App\Notifications\TaskStatusChangedNotification;
 use App\Services\ActivityLogger;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notification as BaseNotification;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -34,10 +34,7 @@ class TaskController extends Controller
         $user = auth()->user();
 
         $tasks = Task::with(['project:id,name', 'assignee:id,name,email'])
-            ->whereHas('project', function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhereHas('members', fn ($q) => $q->where('users.id', $user->id));
-            })
+            ->whereHas('project', fn ($query) => $query->accessibleTo($user))
             ->when($request->filled('status'), fn ($query) => $query->where('status', $request->input('status')))
             ->when($request->filled('project'), fn ($query) => $query->where('project_id', $request->integer('project')))
             ->latest()
@@ -97,7 +94,7 @@ class TaskController extends Controller
      */
     public function show(Task $task): Response
     {
-        $this->authorize('view-project', $task->project_id);
+        $this->authorize('view-task', $task);
 
         $task->load([
             'project:id,name',
@@ -123,7 +120,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): Response
     {
-        $this->authorize('view-project', $task->project_id);
+        $this->authorize('view-task', $task);
 
         $task->load(['project:id,name', 'assignee:id,name,email']);
 
@@ -138,13 +135,16 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
-        $this->authorize('view-project', $task->project_id);
+        $this->authorize('manage-task', $task);
 
         $data = $request->validated();
         $oldStatus = $task->status;
         $oldAssignedTo = $task->assigned_to;
 
-        $this->authorize('view-project', $data['project_id']);
+        // If project is being changed, verify access
+        if (isset($data['project_id']) && $data['project_id'] !== $task->project_id) {
+            $this->authorize('view-project', $data['project_id']);
+        }
 
         $task->update($data);
 
@@ -206,7 +206,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task): RedirectResponse
     {
-        $this->authorize('view-project', $task->project_id);
+        $this->authorize('manage-task', $task);
 
         $project = $task->project;
         $taskTitle = $task->title;
@@ -232,11 +232,8 @@ class TaskController extends Controller
      */
     private function accessibleProjects(User $user): Collection
     {
-        return Project::with(['owner:id,name,email', 'members:id,name,email'])
-            ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhereHas('members', fn ($q) => $q->where('users.id', $user->id));
-            })
+        return Project::accessibleTo($user)
+            ->with(['owner:id,name,email', 'members:id,name,email'])
             ->orderBy('name')
             ->get(['id', 'name', 'user_id']);
     }

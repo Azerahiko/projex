@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\ProjectFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -53,6 +54,41 @@ class Project extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+
+    /**
+     * Scope the query to projects the user is allowed to view.
+     *
+     * @param  Builder<Project>  $query
+     */
+    public function scopeAccessibleTo(Builder $query, User $user): Builder
+    {
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        if ($user->isClient()) {
+            return $query->where('projects.client_id', $user->client_id);
+        }
+
+        return $query->where(function (Builder $q) use ($user) {
+            $q->where('projects.user_id', $user->id)
+                ->orWhereHas('members', fn (Builder $mq) => $mq->where('users.id', $user->id));
+        });
+    }
+
+    /**
+     * Scope the query to projects the user is allowed to manage.
+     *
+     * @param  Builder<Project>  $query
+     */
+    public function scopeManageableBy(Builder $query, User $user): Builder
+    {
+        if ($user->isAdmin()) {
+            return $query;
+        }
+
+        return $query->where('projects.user_id', $user->id);
+    }
 
     /**
      * Get the user that owns the project.

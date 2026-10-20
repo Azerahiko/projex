@@ -25,11 +25,8 @@ class ProjectController extends Controller
     public function index(): Response
     {
         $user = auth()->user();
-        $projects = Project::with(['client', 'owner'])
-            ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhereHas('members', fn ($q) => $q->where('user_id', $user->id));
-            })
+        $projects = Project::accessibleTo($user)
+            ->with(['client', 'owner'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -41,9 +38,12 @@ class ProjectController extends Controller
 
     /**
      * Show the form for creating a new project.
+     * Only Admin and Project Manager can create projects.
      */
     public function create(): Response
     {
+        $this->authorizeProjectCreation();
+
         $clients = Client::orderBy('name')->get(['id', 'name']);
 
         return Inertia::render('projects/create', [
@@ -56,6 +56,8 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request): RedirectResponse
     {
+        $this->authorizeProjectCreation();
+
         $project = Project::create([
             ...$request->validated(),
             'user_id' => auth()->id(),
@@ -140,5 +142,18 @@ class ProjectController extends Controller
 
         return redirect()->route('projects.index')
             ->with('success', 'Project berhasil dihapus.');
+    }
+
+    /**
+     * Authorize that the user can create projects.
+     * Admin, Project Manager, and Employee can create projects.
+     */
+    private function authorizeProjectCreation(): void
+    {
+        $user = auth()->user();
+
+        if (! $user->hasAnyPermission(['manage_all_projects', 'manage_owned_projects', 'create_projects'])) {
+            abort(403, 'Anda tidak memiliki izin untuk membuat project.');
+        }
     }
 }

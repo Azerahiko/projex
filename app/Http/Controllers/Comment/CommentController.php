@@ -22,7 +22,7 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request, Task $task): RedirectResponse
     {
-        $this->authorize('view-project', $task->project_id);
+        $this->authorize('comment-on-task', $task);
 
         $comment = $task->comments()->create([
             'user_id' => auth()->id(),
@@ -47,9 +47,7 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Task $task, Comment $comment): RedirectResponse
     {
-        $this->authorize('view-project', $task->project_id);
-
-        // Check if user is the comment author or project owner
+        $this->authorize('comment-on-task', $task);
         $this->authorizeCommentManagement($comment, $task);
 
         $comment->update($request->validated());
@@ -72,8 +70,7 @@ class CommentController extends Controller
      */
     public function destroy(Task $task, Comment $comment): RedirectResponse
     {
-        $this->authorize('view-project', $task->project_id);
-
+        $this->authorize('comment-on-task', $task);
         $this->authorizeCommentManagement($comment, $task);
 
         $commentId = $comment->id;
@@ -94,14 +91,23 @@ class CommentController extends Controller
 
     /**
      * Check if the current user can manage (update/delete) the comment.
+     * Only the comment author or project owner can manage comments.
      */
     private function authorizeCommentManagement(Comment $comment, Task $task): void
     {
-        abort_unless($comment->task_id === $task->id, 404);
+        // Ensure comment belongs to the task
+        if ($comment->task_id !== $task->id) {
+            abort(404);
+        }
 
         $user = auth()->user();
         $isAuthor = $comment->user_id === $user->id;
-        $isProjectOwner = $task->project->user_id === $user->id;
+        $isProjectOwner = $comment->task->project->user_id === $user->id;
+
+        // Admin can manage all comments
+        if ($user->isAdmin()) {
+            return;
+        }
 
         if (! $isAuthor && ! $isProjectOwner) {
             abort(403, 'Anda tidak memiliki izin untuk mengelola komentar ini.');

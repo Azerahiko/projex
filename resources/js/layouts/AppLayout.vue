@@ -1,11 +1,15 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { Link, usePage, router } from '@inertiajs/vue3';
+import { usePage, Link, router } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { logout as logoutRoute, dashboard } from '@/routes';
 import { index as projectsIndex } from '@/routes/projects';
 import { index as tasksIndex } from '@/routes/tasks';
 import { index as notificationsIndex } from '@/routes/notifications';
 import { index as activitiesIndex } from '@/routes/activities';
+import adminUsers from '@/routes/admin/users';
+import adminInvitations from '@/routes/admin/invitations';
+import adminClients from '@/routes/admin/clients';
 
 const projects = projectsIndex;
 const tasks = tasksIndex;
@@ -21,32 +25,73 @@ const unreadNotificationsCount = computed(
 const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
 
-const navigation = [
-    {
-        name: 'Dashboard',
-        href: dashboard.url(),
-        icon: 'home',
-        current: page.url === '/dashboard',
-    },
-    {
-        name: 'Projects',
-        href: projects.url(),
-        icon: 'folder',
-        current: page.url.startsWith('/projects'),
-    },
-    {
-        name: 'Tasks',
-        href: tasks.url(),
-        icon: 'check-circle',
-        current: page.url.startsWith('/tasks'),
-    },
-    {
-        name: 'Aktivitas',
-        href: activities.url(),
-        icon: 'activity',
-        current: page.url.startsWith('/activities'),
-    },
-];
+const navigation = computed(() => {
+    const user = auth.value?.user;
+    if (!user) return [];
+
+    const items = [
+        {
+            name: 'Dashboard',
+            href: dashboard.url(),
+            icon: 'home',
+            current: page.url === '/dashboard',
+        },
+    ];
+
+    // Admin, PM, Employee can see Projects and Tasks
+    if (user.role !== 'client') {
+        items.push(
+            {
+                name: 'Projects',
+                href: projects.url(),
+                icon: 'folder',
+                current: page.url.startsWith('/projects'),
+            },
+            {
+                name: 'Tasks',
+                href: tasks.url(),
+                icon: 'check-circle',
+                current: page.url.startsWith('/tasks'),
+            }
+        );
+    }
+
+    // Admin, PM, Employee can see Activities
+    if (user.role !== 'client') {
+        items.push({
+            name: 'Aktivitas',
+            href: activities.url(),
+            icon: 'activity',
+            current: page.url.startsWith('/activities'),
+        });
+    }
+
+    // Admin only menu
+    if (user.role === 'admin') {
+        items.push(
+            {
+                name: 'Pengguna',
+                href: adminUsers.url(),
+                icon: 'users',
+                current: page.url.startsWith('/admin/users'),
+            },
+            {
+                name: 'Undangan',
+                href: adminInvitations.url(),
+                icon: 'mail',
+                current: page.url.startsWith('/admin/invitations'),
+            },
+            {
+                name: 'Klien',
+                href: adminClients.url(),
+                icon: 'building',
+                current: page.url.startsWith('/admin/clients'),
+            }
+        );
+    }
+
+    return items;
+});
 
 function toggleSidebar() {
     sidebarOpen.value = !sidebarOpen.value;
@@ -172,6 +217,51 @@ function logout() {
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                         </svg>
+                        <!-- Users icon -->
+                        <svg
+                            v-else-if="item.icon === 'users'"
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                        </svg>
+                        <!-- Mail icon -->
+                        <svg
+                            v-else-if="item.icon === 'mail'"
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
+                        </svg>
+                        <!-- Building icon -->
+                        <svg
+                            v-else-if="item.icon === 'building'"
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                            />
+                        </svg>
                         {{ item.name }}
                     </Link>
                 </nav>
@@ -194,6 +284,9 @@ function logout() {
                             </p>
                             <p class="truncate text-xs text-gray-500">
                                 {{ auth.user?.email }}
+                            </p>
+                            <p class="truncate text-xs text-gray-400 capitalize">
+                                {{ auth.user?.role }}
                             </p>
                         </div>
                     </div>
@@ -321,6 +414,9 @@ function logout() {
                                 </p>
                                 <p class="text-xs text-gray-500">
                                     {{ auth.user?.email }}
+                                </p>
+                                <p class="text-xs text-gray-400 capitalize">
+                                    {{ auth.user?.role }}
                                 </p>
                             </div>
                             <button

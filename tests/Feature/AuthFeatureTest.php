@@ -2,74 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-
-test('user can register with valid data and is automatically logged in', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => 'password123',
-        'password_confirmation' => 'password123',
-    ]);
-
-    $response->assertRedirect(route('dashboard'));
-    $this->assertAuthenticated();
-    $this->assertDatabaseHas('users', [
-        'email' => 'john@example.com',
-    ]);
-
-    $user = User::where('email', 'john@example.com')->first();
-    expect(Hash::check('password123', $user->password))->toBeTrue();
-    expect($user->password)->not->toBe('password123');
-});
-
-test('registration is rejected if email already exists', function () {
-    User::factory()->create(['email' => 'existing@example.com']);
-
-    $response = $this->post(route('register.store'), [
-        'name' => 'John Doe',
-        'email' => 'existing@example.com',
-        'password' => 'password123',
-        'password_confirmation' => 'password123',
-    ]);
-
-    $response->assertSessionHasErrors('email');
-    $this->assertGuest();
-});
-
-test('registration is rejected if password does not match confirmation', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => 'password123',
-        'password_confirmation' => 'wrong-confirmation',
-    ]);
-
-    $response->assertSessionHasErrors('password');
-    $this->assertGuest();
-});
-
-test('registration is rejected if password is shorter than 8 characters', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => 'short',
-        'password_confirmation' => 'short',
-    ]);
-
-    $response->assertSessionHasErrors('password');
-    $this->assertGuest();
-});
-
-test('registration is rejected if name is missing', function () {
-    $response = $this->post(route('register.store'), [
-        'email' => 'john@example.com',
-        'password' => 'password123',
-        'password_confirmation' => 'password123',
-    ]);
-
-    $response->assertSessionHasErrors('name');
-    $this->assertGuest();
-});
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 test('user can login with correct credentials', function () {
     $user = User::factory()->create([
@@ -139,12 +72,22 @@ test('authenticated user can access dashboard', function () {
     $response->assertOk();
 });
 
-test('registration page is accessible', function () {
-    $response = $this->get(route('register'));
-    $response->assertOk();
-});
-
 test('login page is accessible', function () {
     $response = $this->get(route('login'));
     $response->assertOk();
+});
+
+test('public registration is disabled', function () {
+    // Register routes should not exist - accessing them should throw an exception
+    try {
+        $this->get(route('register'))->assertStatus(404);
+    } catch (RouteNotFoundException $e) {
+        // Route doesn't exist - this is expected
+    }
+
+    try {
+        $this->post(route('register.store', []))->assertStatus(404);
+    } catch (RouteNotFoundException $e) {
+        // Route doesn't exist - this is expected
+    }
 });

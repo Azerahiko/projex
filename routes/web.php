@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\Activity\ActivityController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\InvitationController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Invitation\InvitationAcceptanceController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Task\TaskController;
@@ -13,12 +17,30 @@ Route::inertia('/', 'home')->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.store');
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+
+// Public invitation acceptance
+Route::get('/invitations/{token}', [InvitationAcceptanceController::class, 'show'])->name('invitations.show');
+Route::post('/invitations/{token}', [InvitationAcceptanceController::class, 'accept'])->name('invitations.accept');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Admin routes
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.role.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('/invitations', [InvitationController::class, 'index'])->name('invitations.index');
+        Route::post('/invitations', [InvitationController::class, 'store'])->name('invitations.store');
+        Route::post('/invitations/{invitation}/resend', [InvitationController::class, 'resend'])->name('invitations.resend');
+        Route::delete('/invitations/{invitation}', [InvitationController::class, 'destroy'])->name('invitations.destroy');
+
+        Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+        Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+        Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    });
 
     // Project routes
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
