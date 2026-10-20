@@ -2,12 +2,10 @@
 
 use App\Http\Controllers\Activity\ActivityController;
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Client\ClientController;
 use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Project\ProjectController;
-use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Task\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,15 +51,4 @@ Route::middleware(['auth'])->group(function () {
 
     // Activity routes
     Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
-
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
-
-    // Client routes
-    Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
-    Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
-    Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
-    Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
-    Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->name('clients.edit');
-    Route::put('/clients/{client}', [ClientController::class, 'update'])->name('clients.update');
-    Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 });
