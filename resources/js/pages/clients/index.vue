@@ -1,9 +1,31 @@
 <script setup>
+import { ref } from 'vue';
 import { usePage, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import clients from '@/routes/clients';
+
 const page = usePage();
 const { clients: clientsData } = page.props;
+
+const deletingClient = ref(null);
+
+const confirmDelete = (client) => {
+    deletingClient.value = client;
+};
+
+const deleteClient = (client) => {
+    router.delete(route('clients.destroy', client.id), {
+        onSuccess: () => {
+            deletingClient.value = null;
+        },
+    });
+};
+
+const goToPage = (pageNum) => {
+    router.get(route('clients.index', { page: pageNum }), {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -226,38 +248,3 @@ const { clients: clientsData } = page.props;
         </div>
     </AppLayout>
 </template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-    setup() {
-        const deletingClient = ref(null);
-
-        const confirmDelete = (client) => {
-            deletingClient.value = client;
-        };
-
-        const deleteClient = (client) => {
-            router.delete(route('clients.destroy', client.id), {
-                onSuccess: () => {
-                    deletingClient.value = null;
-                },
-            });
-        };
-
-        const goToPage = (page) => {
-            router.get(route('clients.index', { page }), {
-                preserveScroll: true,
-            });
-        };
-
-        return {
-            deletingClient,
-            confirmDelete,
-            deleteClient,
-            goToPage,
-        };
-    },
-};
-</script>

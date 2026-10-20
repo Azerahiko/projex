@@ -93,4 +93,14 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'project_user')->withTimestamps();
     }
+
+    /**
+     * Get the activities recorded for the project.
+     *
+     * @return HasMany<Activity, $this>
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

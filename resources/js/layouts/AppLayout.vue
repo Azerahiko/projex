@@ -5,14 +5,21 @@ import { logout as logoutRoute, dashboard } from '@/routes';
 import { index as projectsIndex } from '@/routes/projects';
 import { index as tasksIndex } from '@/routes/tasks';
 import { index as settingsIndex } from '@/routes/settings';
+import { index as notificationsIndex } from '@/routes/notifications';
+import { index as activitiesIndex } from '@/routes/activities';
 import clients from '@/routes/clients';
 
 const projects = projectsIndex;
 const tasks = tasksIndex;
 const settings = settingsIndex;
+const notifications = notificationsIndex;
+const activities = activitiesIndex;
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
+const unreadNotificationsCount = computed(
+    () => page.props.unreadNotificationsCount ?? 0,
+);
 
 const sidebarOpen = ref(false);
 const dropdownOpen = ref(false);
@@ -41,6 +48,12 @@ const navigation = [
         href: tasks.url(),
         icon: 'check-circle',
         current: page.url.startsWith('/tasks'),
+    },
+    {
+        name: 'Aktivitas',
+        href: activities.url(),
+        icon: 'activity',
+        current: page.url.startsWith('/activities'),
     },
     {
         name: 'Settings',
@@ -195,6 +208,21 @@ function logout() {
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                             />
                         </svg>
+                        <!-- Activity icon -->
+                        <svg
+                            v-else-if="item.icon === 'activity'"
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                        </svg>
                         {{ item.name }}
                     </Link>
                 </nav>
@@ -266,6 +294,37 @@ function logout() {
                             <slot name="title">Dashboard</slot>
                         </h1>
                     </div>
+
+                    <!-- Notification bell -->
+                    <Link
+                        :href="notifications.url()"
+                        class="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100"
+                        aria-label="Notifikasi"
+                    >
+                        <svg
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                            />
+                        </svg>
+                        <span
+                            v-if="unreadNotificationsCount > 0"
+                            class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white"
+                        >
+                            {{
+                                unreadNotificationsCount > 9
+                                    ? '9+'
+                                    : unreadNotificationsCount
+                            }}
+                        </span>
+                    </Link>
 
                     <!-- User dropdown -->
                     <div class="relative">

@@ -1,11 +1,13 @@
 <script setup>
+import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import projects from '@/routes/projects';
+import tasks from '@/routes/tasks';
 import { usePage } from '@inertiajs/vue3';
 
 const page = usePage();
-const { project } = page.props;
+const { project, activities } = page.props;
 
 const statusColors = {
     todo: 'bg-blue-100 text-blue-800',
@@ -22,6 +24,95 @@ const priorityColors = {
 const projectStatusColors = {
     aktif: 'bg-green-100 text-green-800',
     arsip: 'bg-gray-100 text-gray-800',
+};
+
+const showDeleteModal = ref(false);
+
+const confirmDelete = () => {
+    showDeleteModal.value = true;
+};
+
+const deleteProject = () => {
+    router.delete(route('projects.destroy', project.id), {
+        onSuccess: () => {
+            showDeleteModal.value = false;
+        },
+    });
+};
+
+const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
+};
+
+const formatDateTime = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    return (
+        date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+        }) +
+        ' ' +
+        date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+    );
+};
+
+const formatActivityDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const diffMs = Date.now() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Baru saja';
+    if (diffMins < 60) return `${diffMins} menit lalu`;
+    if (diffHours < 24) return `${diffHours} jam lalu`;
+    if (diffDays < 7) return `${diffDays} hari lalu`;
+    return date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
+};
+
+const getActivityColor = (type) => {
+    const colors = {
+        project_created: 'bg-blue-100 text-blue-800',
+        project_updated: 'bg-yellow-100 text-yellow-800',
+        task_created: 'bg-blue-100 text-blue-800',
+        task_updated: 'bg-yellow-100 text-yellow-800',
+        task_deleted: 'bg-red-100 text-red-800',
+        task_status_changed: 'bg-purple-100 text-purple-800',
+        task_assigned: 'bg-purple-100 text-purple-800',
+        comment_created: 'bg-blue-100 text-blue-800',
+        comment_updated: 'bg-yellow-100 text-yellow-800',
+        comment_deleted: 'bg-red-100 text-red-800',
+    };
+    return colors[type] ?? 'bg-gray-100 text-gray-800';
+};
+
+const getActivityLabel = (type) => {
+    const labels = {
+        project_created: 'Membuat project',
+        project_updated: 'Memperbarui project',
+        task_created: 'Membuat tugas',
+        task_updated: 'Memperbarui tugas',
+        task_deleted: 'Menghapus tugas',
+        task_status_changed: 'Mengubah status tugas',
+        task_assigned: 'Menugaskan tugas',
+        comment_created: 'Menambahkan komentar',
+        comment_updated: 'Mengubah komentar',
+        comment_deleted: 'Menghapus komentar',
+    };
+    return labels[type] ?? type;
 };
 </script>
 
@@ -232,6 +323,84 @@ const projectStatusColors = {
                             Belum ada tugas untuk project ini.
                         </p>
                     </div>
+
+                    <!-- Activity Timeline -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <h3 class="mb-4 text-lg font-medium text-gray-900">
+                            Riwayat Aktivitas
+                        </h3>
+                        <div
+                            v-if="activities && activities.length > 0"
+                            class="space-y-3"
+                        >
+                            <div
+                                v-for="activity in activities"
+                                :key="activity.id"
+                                class="flex items-start gap-3 rounded-lg bg-gray-50 p-3"
+                            >
+                                <div
+                                    class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full"
+                                    :class="getActivityColor(activity.type)"
+                                >
+                                    <svg
+                                        class="h-4 w-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm text-gray-900">
+                                        <span class="font-medium">{{
+                                            activity.user?.name ?? 'Sistem'
+                                        }}</span>
+                                        <span class="mx-2 text-gray-500"
+                                            >•</span
+                                        >
+                                        <span>{{
+                                            getActivityLabel(activity.type)
+                                        }}</span>
+                                        <span
+                                            v-if="activity.task"
+                                            class="mx-2 text-gray-500"
+                                            >•</span
+                                        >
+                                        <Link
+                                            v-if="activity.task"
+                                            :href="
+                                                tasks.show.url({
+                                                    task: activity.task.id,
+                                                })
+                                            "
+                                            class="font-medium text-blue-600 hover:text-blue-900"
+                                        >
+                                            {{ activity.task.title }}
+                                        </Link>
+                                    </p>
+                                    <p class="mt-1 text-xs text-gray-500">
+                                        {{
+                                            formatActivityDate(
+                                                activity.created_at,
+                                            )
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <p
+                            v-else
+                            class="py-4 text-center text-sm text-gray-500"
+                        >
+                            Belum ada aktivitas.
+                        </p>
+                    </div>
                 </div>
             </div>
 
@@ -290,60 +459,3 @@ const projectStatusColors = {
         </div>
     </AppLayout>
 </template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-    setup() {
-        const showDeleteModal = ref(false);
-
-        const confirmDelete = () => {
-            showDeleteModal.value = true;
-        };
-
-        const deleteProject = () => {
-            router.delete(route('projects.destroy', project.id), {
-                onSuccess: () => {
-                    showDeleteModal.value = false;
-                },
-            });
-        };
-
-        const formatDate = (dateString) => {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-            });
-        };
-
-        const formatDateTime = (dateString) => {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return (
-                date.toLocaleDateString('id-ID', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric',
-                }) +
-                ' ' +
-                date.toLocaleTimeString('id-ID', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                })
-            );
-        };
-
-        return {
-            showDeleteModal,
-            confirmDelete,
-            deleteProject,
-            formatDate,
-            formatDateTime,
-        };
-    },
-};
-</script>

@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Activity\ActivityController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Client\ClientController;
+use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Notification\NotificationController;
 use App\Http\Controllers\Project\ProjectController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Task\TaskController;
@@ -36,6 +39,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+    // Task Comment routes
+    Route::post('/tasks/{task}/comments', [CommentController::class, 'store'])->name('tasks.comments.store');
+    Route::put('/tasks/{task}/comments/{comment}', [CommentController::class, 'update'])->name('tasks.comments.update');
+    Route::delete('/tasks/{task}/comments/{comment}', [CommentController::class, 'destroy'])->name('tasks.comments.destroy');
+
+    // Notification routes
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // Activity routes
+    Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 

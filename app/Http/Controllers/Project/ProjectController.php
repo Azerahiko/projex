@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Enums\ActivityType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ProjectController extends Controller
 {
+    public function __construct(
+        private ActivityLogger $activityLogger,
+    ) {}
+
     /**
      * Display a listing of projects.
      */
@@ -55,6 +61,13 @@ class ProjectController extends Controller
             'user_id' => auth()->id(),
         ]);
 
+        $this->activityLogger->log(
+            ActivityType::ProjectCreated,
+            "Membuat project \"{$project->name}\"",
+            auth()->user(),
+            $project,
+        );
+
         return redirect()->route('projects.show', $project)
             ->with('success', 'Project berhasil dibuat.');
     }
@@ -68,8 +81,15 @@ class ProjectController extends Controller
 
         $project->load(['client', 'owner', 'tasks', 'members']);
 
+        $activities = $project->activities()
+            ->with(['user:id,name', 'task:id,title'])
+            ->latest()
+            ->limit(30)
+            ->get();
+
         return Inertia::render('projects/show', [
             'project' => $project,
+            'activities' => $activities,
         ]);
     }
 
@@ -97,6 +117,13 @@ class ProjectController extends Controller
         $this->authorize('manage-project', $project->id);
 
         $project->update($request->validated());
+
+        $this->activityLogger->log(
+            ActivityType::ProjectUpdated,
+            "Memperbarui project \"{$project->name}\"",
+            auth()->user(),
+            $project,
+        );
 
         return redirect()->route('projects.show', $project)
             ->with('success', 'Project berhasil diperbarui.');

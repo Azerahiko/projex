@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import clients from '@/routes/clients';
@@ -6,6 +7,20 @@ import { usePage } from '@inertiajs/vue3';
 
 const page = usePage();
 const { client } = page.props;
+
+const showDeleteModal = ref(false);
+
+const confirmDelete = () => {
+    showDeleteModal.value = true;
+};
+
+const deleteClient = () => {
+    router.delete(route('clients.destroy', client.id), {
+        onSuccess: () => {
+            showDeleteModal.value = false;
+        },
+    });
+};
 </script>
 
 <template>
@@ -148,31 +163,3 @@ const { client } = page.props;
         </div>
     </AppLayout>
 </template>
-
-<script>
-import { ref } from 'vue';
-
-export default {
-    setup() {
-        const showDeleteModal = ref(false);
-
-        const confirmDelete = () => {
-            showDeleteModal.value = true;
-        };
-
-        const deleteClient = () => {
-            router.delete(route('clients.destroy', client.id), {
-                onSuccess: () => {
-                    showDeleteModal.value = false;
-                },
-            });
-        };
-
-        return {
-            showDeleteModal,
-            confirmDelete,
-            deleteClient,
-        };
-    },
-};
-</script>
