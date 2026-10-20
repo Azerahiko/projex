@@ -8,37 +8,44 @@ const { auth } = usePage().props;
 <template>
     <AppLayout>
         <template #title>Pengaturan</template>
-        
+
         <div class="max-w-2xl">
-            <div class="bg-white rounded-lg shadow">
-                <div class="p-6 border-b border-gray-200">
+            <div class="rounded-lg bg-white shadow">
+                <div class="border-b border-gray-200 p-6">
                     <h2 class="text-lg font-medium text-gray-900">Profil</h2>
                 </div>
-                
-                <div class="p-6 space-y-6">
+
+                <div class="space-y-6 p-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama</label>
+                        <label
+                            class="mb-1 block text-sm font-medium text-gray-700"
+                            >Nama</label
+                        >
                         <input
                             type="text"
                             :value="auth.user.name"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                            class="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-500"
                             readonly
                         />
                     </div>
-                    
+
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <label
+                            class="mb-1 block text-sm font-medium text-gray-700"
+                            >Email</label
+                        >
                         <input
                             type="email"
                             :value="auth.user.email"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500"
+                            class="w-full rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-500"
                             readonly
                         />
                     </div>
-                    
-                    <div class="pt-4 border-t border-gray-200">
+
+                    <div class="border-t border-gray-200 pt-4">
                         <p class="text-sm text-gray-500">
-                            Fitur pengaturan profil dan password akan segera tersedia.
+                            Fitur pengaturan profil dan password akan segera
+                            tersedia.
                         </p>
                     </div>
                 </div>

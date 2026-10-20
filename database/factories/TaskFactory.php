@@ -25,7 +25,7 @@ class TaskFactory extends Factory
             'description' => fake()->paragraph(),
             'status' => fake()->randomElement(['todo', 'in-progress', 'done']),
             'priority' => fake()->randomElement(['rendah', 'sedang', 'tinggi']),
-            'due_date' => fake()->optional()->dateTimeBetween('now', '+3 months')->format('Y-m-d'),
+            'due_date' => fake()->boolean() ? fake()->dateTimeBetween('now', '+3 months')->format('Y-m-d') : null,
             'assigned_to' => User::factory(),
         ];
     }

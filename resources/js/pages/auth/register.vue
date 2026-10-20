@@ -18,23 +18,25 @@ function submit() {
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div class="max-w-md w-full space-y-6">
+    <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+        <div class="w-full max-w-md space-y-6">
             <div class="mx-auto">
-                <div class="flex items-center justify-center mb-6">
-                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">P</span>
+                <div class="mb-6 flex items-center justify-center">
+                    <div
+                        class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600"
+                    >
+                        <span class="text-xl font-bold text-white">P</span>
                     </div>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 text-center">
+                <h1 class="text-center text-3xl font-bold text-gray-900">
                     Buat Akun Projex
                 </h1>
-                <p class="mt-2 text-sm text-gray-600 text-center">
+                <p class="mt-2 text-center text-sm text-gray-600">
                     Bergabunglah dengan Projex dan mulai kelola project Anda.
                 </p>
             </div>
 
-            <div class="bg-white shadow sm:rounded-lg p-6 sm:p-10">
+            <div class="bg-white p-6 shadow sm:rounded-lg sm:p-10">
                 <form @submit.prevent="submit">
                     <div class="space-y-6">
                         <div>
@@ -50,11 +52,16 @@ function submit() {
                                     type="text"
                                     autocomplete="name"
                                     required
-                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                     v-model="form.name"
-                                    :class="{ 'border-red-500': form.errors.name }"
+                                    :class="{
+                                        'border-red-500': form.errors.name,
+                                    }"
                                 />
-                                <p v-if="form.errors.name" class="mt-1 text-sm text-red-600">
+                                <p
+                                    v-if="form.errors.name"
+                                    class="mt-1 text-sm text-red-600"
+                                >
                                     {{ form.errors.name }}
                                 </p>
                             </div>
@@ -73,11 +80,16 @@ function submit() {
                                     type="email"
                                     autocomplete="email"
                                     required
-                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                     v-model="form.email"
-                                    :class="{ 'border-red-500': form.errors.email }"
+                                    :class="{
+                                        'border-red-500': form.errors.email,
+                                    }"
                                 />
-                                <p v-if="form.errors.email" class="mt-1 text-sm text-red-600">
+                                <p
+                                    v-if="form.errors.email"
+                                    class="mt-1 text-sm text-red-600"
+                                >
                                     {{ form.errors.email }}
                                 </p>
                             </div>
@@ -96,11 +108,16 @@ function submit() {
                                     type="password"
                                     autocomplete="new-password"
                                     required
-                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                     v-model="form.password"
-                                    :class="{ 'border-red-500': form.errors.password }"
+                                    :class="{
+                                        'border-red-500': form.errors.password,
+                                    }"
                                 />
-                                <p v-if="form.errors.password" class="mt-1 text-sm text-red-600">
+                                <p
+                                    v-if="form.errors.password"
+                                    class="mt-1 text-sm text-red-600"
+                                >
                                     {{ form.errors.password }}
                                 </p>
                                 <p class="mt-1 text-xs text-gray-500">
@@ -122,9 +139,12 @@ function submit() {
                                     type="password"
                                     autocomplete="new-password"
                                     required
-                                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm px-3 py-2 border"
+                                    class="block w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                     v-model="form.password_confirmation"
-                                    :class="{ 'border-red-500': form.errors.password_confirmation }"
+                                    :class="{
+                                        'border-red-500':
+                                            form.errors.password_confirmation,
+                                    }"
                                 />
                                 <p
                                     v-if="form.errors.password_confirmation"
@@ -139,7 +159,7 @@ function submit() {
                             <button
                                 type="submit"
                                 :disabled="form.processing"
-                                class="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-70 transition-colors"
+                                class="rounded-lg border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none disabled:opacity-70"
                             >
                                 Daftar
                             </button>

@@ -1,6 +1,11 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
-import { login as loginRoute, register as registerRoute, logout as logoutRoute, dashboard } from '@/routes';
+import {
+    login as loginRoute,
+    register as registerRoute,
+    logout as logoutRoute,
+    dashboard,
+} from '@/routes';
 import { router } from '@inertiajs/vue3';
 
 const page = usePage();
@@ -8,36 +13,40 @@ const auth = page.props.auth;
 </script>
 
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div class="max-w-md w-full space-y-8">
+    <div class="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+        <div class="w-full max-w-md space-y-8">
             <div>
-                <div class="flex items-center justify-center mb-6">
-                    <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">P</span>
+                <div class="mb-6 flex items-center justify-center">
+                    <div
+                        class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600"
+                    >
+                        <span class="text-xl font-bold text-white">P</span>
                     </div>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 text-center">
+                <h1 class="text-center text-3xl font-bold text-gray-900">
                     Selamat Datang di Projex
                 </h1>
-                <p class="mt-2 text-sm text-gray-600 text-center">
+                <p class="mt-2 text-center text-sm text-gray-600">
                     Manajemen project sederhana untuk tim Anda.
                 </p>
             </div>
 
             <div v-if="auth.user">
-                <div class="bg-white rounded-lg shadow p-6 text-center">
-                    <p class="text-gray-700 mb-4">Halo, <strong>{{ auth.user.name }}</strong></p>
-                    <div class="flex gap-3 justify-center">
+                <div class="rounded-lg bg-white p-6 text-center shadow">
+                    <p class="mb-4 text-gray-700">
+                        Halo, <strong>{{ auth.user.name }}</strong>
+                    </p>
+                    <div class="flex justify-center gap-3">
                         <Link
                             :href="dashboard.url()"
-                            class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
                         >
                             Dashboard
                         </Link>
                         <button
                             type="button"
                             @click="router.post(logoutRoute.url())"
-                            class="px-4 py-2 text-red-600 text-sm font-medium hover:underline"
+                            class="px-4 py-2 text-sm font-medium text-red-600 hover:underline"
                         >
                             Keluar
                         </button>
@@ -48,13 +57,13 @@ const auth = page.props.auth;
             <div v-else class="grid grid-cols-2 gap-4">
                 <Link
                     :href="loginRoute.url()"
-                    class="px-4 py-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 transition-colors text-center"
+                    class="rounded-lg border border-transparent bg-blue-600 px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
                 >
                     Masuk
                 </Link>
                 <Link
                     :href="registerRoute.url()"
-                    class="px-4 py-3 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 transition-colors text-center"
+                    class="rounded-lg border border-transparent bg-green-600 px-4 py-3 text-center text-sm font-medium text-white transition-colors hover:bg-green-700"
                 >
                     Daftar
                 </Link>
